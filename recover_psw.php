@@ -113,7 +113,7 @@
             $mail->setFrom('jashbhalakia17@gmail.com', 'Password Reset');
             // get email from input
             $mail->addAddress($_POST["email"]);
-            //$mail->addReplyTo('lamkaizhe16@gmail.com');
+            
 
             // HTML body
             $mail->isHTML(true);
