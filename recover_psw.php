@@ -124,7 +124,7 @@
             http://localhost/Jash-API/reset_psw.php
             <br><br>
             <p>With regrads,</p>
-            <b>Programming with Lam</b>";
+            <b>Jash</b>";
 
             if(!$mail->send()){
                 ?>
