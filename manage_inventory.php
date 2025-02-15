@@ -170,11 +170,11 @@ $products = $inventoryController->getAllProducts();
     <!-- Navigation Bar -->
     <div class="navbar">
         <div class="menu">
-            <a href="index.php">🏠 Home</a>
-            <a href="inventory.php">📦 Inventory</a>
+            <a href="dashboard.php">🏠 Home</a>
+            <a href="manage_inventory.php">📦 Inventory</a>
             <a href="order_reservation.php">🛒 Orders</a>
             <a href="sales.php">💰 Sales</a>
-            <a href="reports.php">📊 Reports</a>
+            <a href="report_dashboard.php">📊 Reports</a>
         </div>
     </div>
 

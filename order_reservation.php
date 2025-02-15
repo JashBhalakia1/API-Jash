@@ -148,7 +148,7 @@ $inventory = $order->getInventory(); // Fetch inventory
     <!-- Navigation Bar -->
     <div class="navbar">
         <div class="menu">
-            <a href="index.php">🏠 Home</a>
+            <a href="dashboard.php">🏠 Home</a>
             <a href="manage_inventory.php">📦 Inventory</a>
             <a href="order_reservation.php">🛒 Order Reservation</a>
             <a href="report_dashboard.php">📊 Reports</a>

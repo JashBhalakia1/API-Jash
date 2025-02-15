@@ -7,10 +7,10 @@ session_destroy();
 
 // ✅ Ensure headers are not sent before redirecting
 if (!headers_sent()) {
-    header("Location: login.php");
+    header("Location: Index.php");
     exit;
 } else {
-    echo "<script>window.location.href='login.php';</script>";
+    echo "<script>window.location.href='Index.php';</script>";
     exit;
 }
 ?>

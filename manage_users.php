@@ -89,7 +89,7 @@ $users = $userController->getAllUsers();
         <ul class="navbar-nav ml-auto">
             <li class="nav-item"><a class="nav-link" href="add_user.php">Add User</a></li>
             <li class="nav-item"><a class="nav-link" href="logout.php">Logout</a></li>
-            <li class="nav-item"><a class="nav-link" href="Index.php">Home</a></li>
+            <li class="nav-item"><a class="nav-link" href="dashboard.php">Home</a></li>
         </ul>
     </div>
 </nav>
