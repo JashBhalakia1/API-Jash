@@ -1,73 +1,72 @@
-<?php session_start(); ?>
 <?php
-    include('connect/connection.php');
+session_start();
+include('connect/connection.php');
 
-    if(isset($_POST["register"])){
-        $email = $_POST["email"];
-        $password = $_POST["password"];
+$database = new Connection();
+$pdo = $database->pdo; // Use PDO instead of mysqli
 
-        $check_query = mysqli_query($connect, "SELECT * FROM login where email ='$email'");
-        $rowCount = mysqli_num_rows($check_query);
+if(isset($_POST["register"])){
+    $email = $_POST["email"];
+    $password = $_POST["password"];
 
-        if(!empty($email) && !empty($password)){
-            if($rowCount > 0){
-                ?>
-                <script>
-                    alert("User with email already exist!");
-                </script>
-                <?php
-            }else{
-                $password_hash = password_hash($password, PASSWORD_BCRYPT);
+    // Use PDO to check if email already exists
+    $stmt = $pdo->prepare("SELECT * FROM login WHERE email = :email");
+    $stmt->execute(['email' => $email]);
+    $rowCount = $stmt->rowCount();
 
-                $result = mysqli_query($connect, "INSERT INTO login (email, password, status) VALUES ('$email', '$password_hash', 0)");
-    
-                if($result){
-                    $otp = rand(100000,999999);
-                    $_SESSION['otp'] = $otp;
-                    $_SESSION['mail'] = $email;
-                    require "Mail/phpmailer/PHPMailerAutoload.php";
-                    $mail = new PHPMailer;
-    
-                    $mail->isSMTP();
-                    $mail->Host='smtp.gmail.com';
-                    $mail->Port=465;
-                    $mail->SMTPAuth=true;
-                    $mail->SMTPSecure='ssl';
-    
-                    $mail->Username='jashbhalakia17@gmail.com';
-                    $mail->Password='zmsilzvamywidztr';
-    
-                    $mail->setFrom('jashbhalakia17@gmail.com', 'OTP Verification');
-                    $mail->addAddress($_POST["email"]);
-    
-                    $mail->isHTML(true);
-                    $mail->Subject="Your verify code";
-                    $mail->Body="<p>Dear user, </p> <h3>Your verify OTP code is $otp <br></h3>
-                    <br><br>
-                    <p>With regards,</p>
-                    <b>Jash</b>
-                    ";
-    
-                            if(!$mail->send()){
-                                ?>
-                                    <script>
-                                        alert("<?php echo "Register Failed, Invalid Email "?>");
-                                    </script>
-                                <?php
-                            }else{
-                                ?>
-                                <script>
-                                    alert("<?php echo "Register Successfully, OTP sent to " . $email ?>");
-                                    window.location.replace('verification.php');
-                                </script>
-                                <?php
-                            }
+    if(!empty($email) && !empty($password)){
+        if($rowCount > 0){
+            echo "<script>alert('User with email already exists!');</script>";
+        } else {
+            $password_hash = password_hash($password, PASSWORD_BCRYPT);
+
+            // Insert new user using PDO
+            $stmt = $pdo->prepare("INSERT INTO login (email, password, status) VALUES (:email, :password, 0)");
+            $result = $stmt->execute(['email' => $email, 'password' => $password_hash]);
+
+            if($result){
+                $otp = rand(100000, 999999);
+                $_SESSION['otp'] = $otp;
+                $_SESSION['mail'] = $email;
+
+                require "Mail/phpmailer/PHPMailerAutoload.php";
+                $mail = new PHPMailer;
+
+                $mail->isSMTP();
+                $mail->Host = 'smtp.gmail.com';
+                $mail->Port = 465;
+                $mail->SMTPAuth = true;
+                $mail->SMTPSecure = 'ssl';
+
+                $mail->Username='jashbhalakia17@gmail.com';
+                $mail->Password='zmsilzvamywidztr';
+
+
+                $mail->setFrom('jashbhalakia17@gmail.com', 'OTP Verification');
+                $mail->addAddress($_POST["email"]);
+
+
+                $mail->isHTML(true);
+                $mail->Subject = "Your Verification Code";
+                $mail->Body = "<p>Dear user,</p><h3>Your OTP code is $otp</h3><br><p>With regards,</p><b>Jash</b>";
+
+                if(!$mail->send()){
+                    echo "<script>alert('Register Failed, Invalid Email');</script>";
+                } else {
+                    echo "<script>alert('Register Successful, OTP sent to $email'); window.location.replace('verification.php');</script>";
                 }
             }
         }
     }
-
+}
 ?>
+
+
+
+
+
+
+
 
 <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
 <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
