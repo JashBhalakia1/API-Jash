@@ -70,38 +70,60 @@ include('connect/connection.php');
 </body>
 </html>
 <?php
-    if(isset($_POST["reset"])){
-        include('connect/connection.php');
-        $psw = $_POST["password"];
+session_start();
+require_once 'connect/connection.php'; // Ensure connection is included
 
-        $token = $_SESSION['token'];
-        $Email = $_SESSION['email'];
-
-        $hash = password_hash( $psw , PASSWORD_DEFAULT );
-
-        $sql = mysqli_query($connect, "SELECT * FROM login WHERE email='$Email'");
-        $query = mysqli_num_rows($sql);
-  	    $fetch = mysqli_fetch_assoc($sql);
-
-        if($Email){
-            $new_pass = $hash;
-            mysqli_query($connect, "UPDATE login SET password='$new_pass' WHERE email='$Email'");
-            ?>
-            <script>
-                window.location.replace("index.php");
-                alert("<?php echo "your password has been succesful reset"?>");
-            </script>
-            <?php
-        }else{
-            ?>
-            <script>
-                alert("<?php echo "Please try again"?>");
-            </script>
-            <?php
-        }
+// Check if form is submitted
+if(isset($_POST["reset"])) {
+    // Validate session email
+    if (!isset($_SESSION['email'])) {
+        echo "<script>alert('Session expired. Please try resetting again.'); window.location='recover_psw.php';</script>";
+        exit();
     }
 
+    // Retrieve email and new password
+    $email = $_SESSION['email'];
+    $password = $_POST["password"];
+
+    // Ensure connection is valid
+    if (!$connect) {
+        die("Database connection failed: " . mysqli_connect_error());
+    }
+
+    // Check if user exists
+    $stmt = mysqli_prepare($connect, "SELECT id FROM login WHERE email = ?");
+    mysqli_stmt_bind_param($stmt, "s", $email);
+    mysqli_stmt_execute($stmt);
+    $result = mysqli_stmt_get_result($stmt);
+
+    if ($row = mysqli_fetch_assoc($result)) {
+        // Hash the new password
+        $hashed_password = password_hash($password, PASSWORD_DEFAULT);
+
+        // Update password
+        $update_stmt = mysqli_prepare($connect, "UPDATE login SET password = ? WHERE email = ?");
+        mysqli_stmt_bind_param($update_stmt, "ss", $hashed_password, $email);
+        $update_result = mysqli_stmt_execute($update_stmt);
+
+        if ($update_result) {
+            // Destroy session after password reset
+            session_unset();
+            session_destroy();
+
+            echo "<script>
+                alert('Your password has been successfully reset.');
+                window.location='index.php';
+            </script>";
+        } else {
+            echo "<script>alert('Error updating password. Please try again.');</script>";
+        }
+    } else {
+        echo "<script>alert('Invalid request. Email not found.'); window.location='recover_psw.php';</script>";
+    }
+}
 ?>
+
+
 <script>
     const toggle = document.getElementById('togglePassword');
     const password = document.getElementById('password');
