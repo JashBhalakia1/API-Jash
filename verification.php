@@ -65,29 +65,37 @@
 </main>
 </body>
 </html>
-<?php 
-    include('connect/connection.php');
-    if(isset($_POST["verify"])){
-        $otp = $_SESSION['otp'];
-        $email = $_SESSION['mail'];
-        $otp_code = $_POST['otp_code'];
+<?php
 
-        if($otp != $otp_code){
-            ?>
-           <script>
-               alert("Invalid OTP code");
-           </script>
-           <?php
-        }else{
-            mysqli_query($connect, "UPDATE login SET status = 1 WHERE email = '$email'");
-            ?>
-             <script>
-                 alert("Verfiy account done, you may sign in now");
-                   window.location.replace("index.php");
-             </script>
-             <?php
-        }
+require 'connect/connection.php'; // Ensure this file defines $pdo
+$database = new connection(); // Create a connection instance
+$pdo = $database->getConnection(); // Retrieve the PDO connection
 
+if (isset($_POST["verify"])) {
+    $otp = $_SESSION['otp'] ?? null;
+    $email = $_SESSION['mail'] ?? null;
+    $otp_code = $_POST['otp_code'];
+
+    if (!$otp || !$email) {
+        echo "<script>alert('Session expired. Please try again.'); window.location.replace('index.php');</script>";
+        exit;
     }
 
+    if ($otp != $otp_code) {
+        echo "<script>alert('Invalid OTP code');</script>";
+    } else {
+        try {
+            // Update user status to verified
+            $stmt = $pdo->prepare("UPDATE login SET status = 1 WHERE email = ?");
+            $stmt->execute([$email]);
+
+            echo "<script>
+                    alert('Verification successful! You may sign in now.');
+                    window.location.replace('index.php');
+                  </script>";
+        } catch (PDOException $e) {
+            echo "<script>alert('Error: " . $e->getMessage() . "');</script>";
+        }
+    }
+}
 ?>
