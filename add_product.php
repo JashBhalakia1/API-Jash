@@ -97,7 +97,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             color: #333;
         }
 
-        input[type="text"], 
+        select,
         input[type="number"] {
             padding: 10px;
             margin-bottom: 20px;
@@ -174,7 +174,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <!-- Add Product Form -->
         <form action="add_product.php" method="POST">
             <label for="item_name">Product Name</label>
-            <input type="text" id="item_name" name="item_name" placeholder="Enter product name" required>
+            <select id="item_name" name="item_name" required>
+                <option value="" disabled selected>Select a product</option>
+                <option value="iPhone 10">iPhone 10</option>
+                <option value="Redmi 5">Redmi 5</option>
+                <option value="Oppo 7">Oppo 7</option>
+                <option value="Vivo 7">Vivo 7</option>
+                <option value="Samsung S24">Samsung S24</option>
+            </select>
             
             <label for="stock">Stock Quantity</label>
             <input type="number" id="stock" name="stock" placeholder="Enter product stock" required>
