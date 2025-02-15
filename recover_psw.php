@@ -67,80 +67,79 @@
 </html>
 
 <?php 
-    if(isset($_POST["recover"])){
-        include('connect/connection.php');
+    
+ 
+    require 'connect/connection.php'; // Include PDO connection
+    
+    
+    require_once "Mail/phpmailer/PHPMailerAutoload.php";
+    $database = new connection(); // Create a connection instance
+    $pdo = $database->getConnection(); // Retrieve the PDO connection
+
+   
+    
+    if(isset($_POST["recover"])) {
         $email = $_POST["email"];
-
-        $sql = mysqli_query($connect, "SELECT * FROM login WHERE email='$email'");
-        $query = mysqli_num_rows($sql);
-  	    $fetch = mysqli_fetch_assoc($sql);
-
-        if(mysqli_num_rows($sql) <= 0){
-            ?>
-            <script>
-                alert("<?php  echo "Sorry, no emails exists "?>");
-            </script>
-            <?php
-        }else if($fetch["status"] == 0){
-            ?>
-               <script>
-                   alert("Sorry, your account must verify first, before you recover your password !");
-                   window.location.replace("index.php");
-               </script>
-           <?php
-        }else{
-            // generate token by binaryhexa 
-            $token = bin2hex(random_bytes(50));
-
-            //session_start ();
-            $_SESSION['token'] = $token;
-            $_SESSION['email'] = $email;
-
-            require "Mail/phpmailer/PHPMailerAutoload.php";
-            $mail = new PHPMailer;
-
-            $mail->isSMTP();
-            $mail->Host='smtp.gmail.com';
-            $mail->Port=465;
-            $mail->SMTPAuth=true;
-            $mail->SMTPSecure='ssl';
-
-            // h-hotel account
-            $mail->Username='jashbhalakia17@gmail.com';
-            $mail->Password='zmsilzvamywidztr';
-
-            // send by h-hotel email
-            $mail->setFrom('jashbhalakia17@gmail.com', 'Password Reset');
-            // get email from input
-            $mail->addAddress($_POST["email"]);
-            
-
-            // HTML body
-            $mail->isHTML(true);
-            $mail->Subject="Recover your password";
-            $mail->Body="<b>Dear User</b>
-            <h3>We received a request to reset your password.</h3>
-            <p>Kindly click the below link to reset your password</p>
-            http://localhost/Jash-API/reset_psw.php
-            <br><br>
-            <p>With regrads,</p>
-            <b>Jash</b>";
-
-            if(!$mail->send()){
-                ?>
-                    <script>
-                        alert("<?php echo " Invalid Email "?>");
-                    </script>
-                <?php
-            }else{
-                ?>
-                    <script>
-                        window.location.replace("notification.html");
-                    </script>
-                <?php
+    
+        try {
+            // Prepare and execute the query securely
+            $stmt = $pdo->prepare("SELECT * FROM login WHERE email = :email");
+            $stmt->bindParam(':email', $email, PDO::PARAM_STR);
+            $stmt->execute();
+            $fetch = $stmt->fetch(PDO::FETCH_ASSOC);
+    
+            // Check if email exists
+            if (!$fetch) {
+                echo "<script>alert('Sorry, no email exists');</script>";
+            } elseif ($fetch["status"] == 0) {
+                echo "<script>
+                        alert('Sorry, your account must be verified first before you can recover your password!');
+                        window.location.replace('index.php');
+                      </script>";
+            } else {
+                // Generate a secure token
+                $token = bin2hex(random_bytes(50));
+    
+                // Store token and email in session
+                $_SESSION['token'] = $token;
+                $_SESSION['email'] = $email;
+    
+                // Send password reset email
+                $mail = new PHPMailer;
+                $mail->isSMTP();
+                $mail->Host = 'smtp.gmail.com';
+                $mail->Port = 465;
+                $mail->SMTPAuth = true;
+                $mail->SMTPSecure = 'ssl';
+    
+                // Replace with environment variables or a config file
+                $mail->Username = 'jashbhalakia17@gmail.com';
+                $mail->Password = 'zmsilzvamywidztr';
+    
+                $mail->setFrom('jashbhalakia17@gmail.com', 'Password Reset');
+                $mail->addAddress($email);
+    
+                $mail->isHTML(true);
+                $mail->Subject = "Recover your password";
+                $mail->Body = "
+                    <b>Dear User,</b>
+                    <h3>We received a request to reset your password.</h3>
+                    <p>Kindly click the below link to reset your password:</p>
+                    <a href='http://localhost/Jash-API/reset_psw.php?token=$token'>Reset Password</a>
+                    <br><br>
+                    <p>With regards,</p>
+                    <b>Jash</b>
+                ";
+    
+                if (!$mail->send()) {
+                    echo "<script>alert('Invalid Email');</script>";
+                } else {
+                    echo "<script>window.location.replace('notification.html');</script>";
+                }
             }
+        } catch (PDOException $e) {
+            echo "Error: " . $e->getMessage();
         }
     }
-
-
-?>
+    ?>
+    
