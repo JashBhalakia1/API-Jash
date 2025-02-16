@@ -20,10 +20,7 @@ function loginUser($pdo, $email, $password) {
     $stmt->execute();
     $user = $stmt->fetch();
 
-    if ($user && password_verify($password, $user["password_hash"])) {
-        return $user;
-    }
-    return false;
+   
 }
 
 $errorMessage = "";

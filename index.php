@@ -100,7 +100,6 @@
     <!-- Navigation Bar -->
     <div class="navbar">
         <a href="index.php">🏠 Home</a>
-        
     </div>
 
     <!-- Welcome Section -->
@@ -111,7 +110,7 @@
         <!-- Quick Access Links -->
         <div class="quick-links">
             <a href="index1.php">📦 Login</a>
-            <a href="register.php">➕ admin register</a>
+            <a href="register.php">➕ Register Admin</a>
         </div>
     </div>
 
