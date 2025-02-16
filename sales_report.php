@@ -14,7 +14,7 @@ if (!$pdo) {
 // Create an instance of Sales class
 $sales = new Sales($pdo);
 
-// Fetch sales data
+// Fetch all sales initially
 $salesData = $sales->getSales();
 
 // Handle date filtering
@@ -31,8 +31,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sales Report</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <style>
-        /* General Page Styling */
         body {
             font-family: 'Poppins', sans-serif;
             background: #f4f4f9;
@@ -40,7 +40,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             padding: 0;
         }
 
-        /* Navigation Bar */
         .navbar {
             background-color: #343a40;
             overflow: hidden;
@@ -67,7 +66,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             transform: scale(1.1);
         }
 
-        /* Container */
         .container {
             width: 90%;
             max-width: 900px;
@@ -84,7 +82,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             margin-bottom: 20px;
         }
 
-        /* Form Styling */
         form {
             display: flex;
             justify-content: center;
@@ -111,7 +108,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             background: #218838;
         }
 
-        /* Table Styling */
         table {
             width: 100%;
             border-collapse: collapse;
@@ -147,7 +143,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             background: #f1f1f1;
         }
 
-        /* Export Buttons */
         .export-btns {
             margin-top: 20px;
         }
@@ -177,11 +172,21 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         .excel-btn:hover {
             background: #218838;
         }
+
+        .calendar-icon {
+            cursor: pointer;
+            font-size: 20px;
+            color: #007bff;
+        }
+
+        .calendar-icon:hover {
+            color: #0056b3;
+        }
     </style>
 </head>
 <body>
 
-    <!-- Navigation Bar -->
+    <!-- ✅ Navigation Bar -->
     <div class="navbar">
         <div class="menu">
             <a href="index.php">🏠 Home</a>
@@ -193,40 +198,70 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     </div>
 
     <div class="container">
-        <h2>Sales Report</h2>
+        <h2>📊 Sales Report</h2>
 
-        <!-- Date Filter Form -->
+        <!-- ✅ Date Filtering Form -->
         <form method="POST">
-            <input type="date" name="start_date" required>
-            <input type="date" name="end_date" required>
+            <label for="start_date">📅 Start Date:</label>
+            <input type="date" id="start_date" name="start_date" required>
+            <label for="end_date">📅 End Date:</label>
+            <input type="date" id="end_date" name="end_date" required>
             <button type="submit">Filter</button>
         </form>
 
+        <!-- ✅ Sales Table -->
         <table>
-            <tr>
-                <th>Sale ID</th>
-                <th>Product</th>
-                <th>Quantity</th>
-                <th>Total Price</th>
-                <th>Date</th>
-            </tr>
-            <?php foreach ($salesData as $sale): ?>
+            <thead>
                 <tr>
-                    <td><?= $sale['id']; ?></td>
-                    <td><?= $sale['item_name']; ?></td>
-                    <td><?= $sale['quantity']; ?></td>
-                    <td>$<?= number_format($sale['total_price'], 2); ?></td>
-                    <td><?= $sale['sale_date']; ?></td>
+                    <th>Sale ID</th>
+                    <th>Product</th>
+                    <th>Quantity</th>
+                    <th>Total Price</th>
+                    <th>Date</th>
                 </tr>
-            <?php endforeach; ?>
+            </thead>
+            <tbody>
+                <?php foreach ($salesData as $sale): ?>
+                    <tr>
+                        <td><?= $sale['id']; ?></td>
+                        <td><?= $sale['item_name']; ?></td>
+                        <td><?= $sale['quantity']; ?></td>
+                        <td>$<?= number_format($sale['total_price'], 2); ?></td>
+                        <td><?= $sale['sale_date']; ?></td>
+                    </tr>
+                <?php endforeach; ?>
+            </tbody>
         </table>
 
-        <!-- Export Buttons -->
+        <!-- ✅ Export Buttons -->
         <div class="export-btns">
             <a href="export_sales_pdf.php" class="export-btn pdf-btn">📄 Export as PDF</a>
             <a href="export_sales_excel.php" class="export-btn excel-btn">📊 Export as Excel</a>
         </div>
     </div>
+    <!-- Export Buttons -->
+<div class="export-btns">
+    <a href="#" id="exportExcel" class="export-btn excel-btn">📊 Export as Excel</a>
+</div>
+
+<script>
+    document.getElementById("exportExcel").addEventListener("click", function() {
+        let startDate = document.getElementById("start_date").value;
+        let endDate = document.getElementById("end_date").value;
+        let url = "export_sales_excel.php?start_date=" + startDate + "&end_date=" + endDate;
+        window.location.href = url;
+    });
+</script>
+
+
+    <script>
+        // ✅ Set default date values to today
+        document.addEventListener("DOMContentLoaded", function () {
+            let today = new Date().toISOString().split("T")[0];
+            document.getElementById("start_date").value = today;
+            document.getElementById("end_date").value = today;
+        });
+    </script>
 
 </body>
 </html>
