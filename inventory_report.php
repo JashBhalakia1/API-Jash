@@ -120,7 +120,7 @@ $inventoryData = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <div class="menu">
         <a href="dashboard.php"><i class="fas fa-home"></i> Dashboard</a>
         <a href="manage_inventory.php"><i class="fas fa-box"></i> Manage Inventory</a>
-        <a href="export_inventory.php"><i class="fas fa-file-pdf"></i> Export PDF</a>
+        
         <a href="logout.php"><i class="fas fa-sign-out-alt"></i> Logout</a>
     </div>
 </div>
@@ -149,6 +149,8 @@ $inventoryData = $stmt->fetchAll(PDO::FETCH_ASSOC);
     
     <div class="dashboard-footer">
         <a href="report_dashboard.php">⬅ Back to Reports</a>
+        <a href="export_inventory_excel.php" class="export-btn excel-btn">📊 Export as Excel</a>
+        <a href="export_inventory.php"><i class="fas fa-file-pdf"></i> Export PDF</a>
     </div>
 </div>
 
