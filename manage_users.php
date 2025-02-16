@@ -104,6 +104,7 @@ $users = $userController->getAllUsers();
                 <th>ID</th>
                 <th>Name</th>
                 <th>Email</th>
+                <th>Role</th>  <!-- ✅ Added Role Column -->
                 <th>Status</th>
                 <th>Actions</th>
             </tr>
@@ -114,6 +115,7 @@ $users = $userController->getAllUsers();
                     <td><?= htmlspecialchars($user['id']) ?></td>
                     <td><?= htmlspecialchars($user['name']) ?></td>
                     <td><?= htmlspecialchars($user['email']) ?></td>
+                    <td><?= htmlspecialchars($user['Role']) ?></td> <!-- ✅ Display Role -->
                     <td><?= htmlspecialchars($user['Status']) ?></td>
                     <td>
                         <a href="edit_user.php?id=<?= $user['id'] ?>" class="btn btn-warning btn-sm">✏ Edit</a>

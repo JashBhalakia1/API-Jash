@@ -32,26 +32,32 @@ class UserController {
     }
 
     // Create a new user
-    public function createUser($name, $email, $password) {
-        try {
-            $hashedPassword = password_hash($password, PASSWORD_BCRYPT);
-            $stmt = $this->pdo->prepare("INSERT INTO users (name, email, password) VALUES (?, ?, ?)");
-            return $stmt->execute([$name, $email, $hashedPassword]);
-        } catch (PDOException $e) {
-            die("Error creating user: " . $e->getMessage());
-        }
+    // Create a new user (UPDATED)
+public function createUser($name, $email, $role, $status, $password) {
+    try {
+        $hashedPassword = password_hash($password, PASSWORD_BCRYPT);
+        $stmt = $this->pdo->prepare("INSERT INTO users (name, email, role, status, password) VALUES (?, ?, ?, ?, ?)");
+        return $stmt->execute([$name, $email, $role, $status, $hashedPassword]);
+    } catch (PDOException $e) {
+        die("Error creating user: " . $e->getMessage());
     }
+}
+
 
     // Update user details
-    public function updateUser($id, $name, $email) {
-        try {
-            $stmt = $this->pdo->prepare("UPDATE users SET name = ?, email = ? WHERE id = ?");
-            return $stmt->execute([$name, $email, $id]);
-        } catch (PDOException $e) {
-            die("Error updating user: " . $e->getMessage());
-        }
+    public function updateUser($id, $name, $email, $role, $status) {
+        $sql = "UPDATE users SET name = :name, email = :email, Role = :Role, Status = :Status WHERE id = :id";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute([
+            ':name' => $name,
+            ':email' => $email,
+            ':Role' => $role,   // 🔹 Capital "R" matches the column name
+            ':Status' => $status, // 🔹 Capital "S" matches the column name
+            ':id' => $id
+        ]);
     }
-
+    
+    
     // Delete a user
     public function deleteUser($id) {
         try {
