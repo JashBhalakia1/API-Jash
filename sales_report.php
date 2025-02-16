@@ -240,9 +240,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         </div>
     </div>
     <!-- Export Buttons -->
-<div class="export-btns">
-    <a href="#" id="exportExcel" class="export-btn excel-btn">📊 Export as Excel</a>
-</div>
+
 
 <script>
     document.getElementById("exportExcel").addEventListener("click", function() {
