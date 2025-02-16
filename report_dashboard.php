@@ -80,11 +80,11 @@
         <li><a href="sales_report.php">📈  Sales Report</a></li>
         <li><a href="user_report.php">👤 User Report</a></li>
         <li><a href="inventory_report.php">📦 Inventory Report</a></li>
-        <li><a href="export_reports.php">📤 Export Reports (PDF/Excel)</a></li>
+       
     </ul>
 
     <div class="dashboard-footer">
-        &copy; <?php echo date("Y"); ?> Report System. All Rights Reserved.
+        &copy; <?php echo date("Y"); ?> Jash's System. All Rights Reserved.
     </div>
 </div>
 
