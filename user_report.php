@@ -163,6 +163,7 @@ $userData = $stmt->fetchAll(PDO::FETCH_ASSOC);
 <div class="dashboard-footer">
     <a href="report_dashboard.php">⬅ Back to Reports</a>
     <a href="export_user_report.php" class="export-btn">📄 Export as PDF</a>
+    <a href="export_users_excel.php" class="export-btn excel-btn">📊 Export as Excel</a>
 </div>
 
 </body>
