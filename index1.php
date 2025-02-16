@@ -92,9 +92,7 @@ if (isset($_POST["login"])) {
                 <li class="nav-item">
                     <a class="nav-link" href="index.php" style="font-weight:bold; color:black; text-decoration:underline"> Admin Login</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="login.php" style="font-weight:bold; color:black; text-decoration:underline">User Login</a>
-                </li>
+                
                 <li class="nav-item">
                     <a class="nav-link" href="register.php">Register</a>
                 </li>
