@@ -175,6 +175,7 @@ $products = $inventoryController->getAllProducts();
             <a href="order_reservation.php">🛒 Orders</a>
             <a href="sales.php">💰 Sales</a>
             <a href="report_dashboard.php">📊 Reports</a>
+            <a href="inventory_analytics.php">📊 Analytics</a>
         </div>
         
     </div>
