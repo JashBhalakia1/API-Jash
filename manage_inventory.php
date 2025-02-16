@@ -176,6 +176,7 @@ $products = $inventoryController->getAllProducts();
             <a href="sales.php">💰 Sales</a>
             <a href="report_dashboard.php">📊 Reports</a>
         </div>
+        
     </div>
 
     <div class="container">
