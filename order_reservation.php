@@ -154,6 +154,7 @@ $inventory = $order->getInventory();
         <a href="sales.php">💰 Sales</a>
         <a href="report_dashboard.php">📊 Reports</a>
         
+        
         <div class="dropdown">
             <a href="#">⚙️ Settings ▾</a>
             <div class="dropdown-content">

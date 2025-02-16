@@ -177,6 +177,7 @@ $salesData = $sales->getSales();
             <a href="order_reservation.php">🛒 Orders</a>
             <a href="sales.php">💰 Sales</a>
             <a href="report_dashboard.php">📊 Reports</a>
+            <a href="sales_chart.php">📊 Analytics</a>
         </div>
     </div>
 
