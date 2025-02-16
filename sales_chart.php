@@ -1,10 +1,16 @@
 <?php
+// Include the database connection file
 require 'connect/Connection.php';
+// Include the Sales logic file to fetch sales data
 require 'Saleslogic.php';
 
+// Create a new database connection instance
 $database = new Connection();
 $pdo = $database->getConnection();
+
+// Create an instance of Sales class to interact with the database
 $sales = new Sales($pdo);
+// Retrieve sales data from the database
 $salesData = $sales->getSales();
 
 // Prepare data for Chart.js ensuring no duplicate labels
@@ -13,12 +19,13 @@ $salesAmounts = [];
 $quantities = [];
 $uniqueSales = [];
 
+// Loop through sales data to extract unique product names and corresponding sales details
 foreach ($salesData as $sale) {
     if (!isset($uniqueSales[$sale['item_name']])) {
-        $labels[] = $sale['item_name'];
-        $salesAmounts[] = $sale['total_price'];
-        $quantities[] = $sale['quantity'];
-        $uniqueSales[$sale['item_name']] = true;
+        $labels[] = $sale['item_name']; // Store product names as labels
+        $salesAmounts[] = $sale['total_price']; // Store total sales amounts
+        $quantities[] = $sale['quantity']; // Store quantity sold
+        $uniqueSales[$sale['item_name']] = true; // Mark product as processed
     }
 }
 ?>
@@ -28,6 +35,7 @@ foreach ($salesData as $sale) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sales Charts</title>
+    <!-- Include Chart.js for generating charts -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         body {
@@ -38,7 +46,7 @@ foreach ($salesData as $sale) {
             padding: 20px;
         }
         .chart-container {
-            width: 45%;
+            width: 45%; /* Set chart container width */
             display: inline-block;
             background: white;
             padding: 15px;
@@ -81,16 +89,18 @@ foreach ($salesData as $sale) {
         <canvas id="quantityChart"></canvas>
     </div>
     <br>
+    <!-- Button to navigate back to the sales page -->
     <a href="sales.php" class="back-button">Back to Sales</a>
     <script>
+        // Create bar chart for total sales amount
         var ctx1 = document.getElementById('salesChart').getContext('2d');
         var salesChart = new Chart(ctx1, {
             type: 'bar',
             data: {
-                labels: <?= json_encode($labels) ?>,
+                labels: <?= json_encode($labels) ?>, // Product names as labels
                 datasets: [{
                     label: 'Total Sales ($)',
-                    data: <?= json_encode($salesAmounts) ?>,
+                    data: <?= json_encode($salesAmounts) ?>, // Sales amounts data
                     backgroundColor: 'rgba(75, 192, 192, 0.6)',
                     borderColor: 'rgba(75, 192, 192, 1)',
                     borderWidth: 1
@@ -101,20 +111,21 @@ foreach ($salesData as $sale) {
                 maintainAspectRatio: false,
                 scales: {
                     y: {
-                        beginAtZero: true
+                        beginAtZero: true // Ensure Y-axis starts from zero
                     }
                 }
             }
         });
         
+        // Create pie chart for quantity of products sold
         var ctx2 = document.getElementById('quantityChart').getContext('2d');
         var quantityChart = new Chart(ctx2, {
             type: 'pie',
             data: {
-                labels: <?= json_encode($labels) ?>,
+                labels: <?= json_encode($labels) ?>, // Product names as labels
                 datasets: [{
                     label: 'Quantity Sold',
-                    data: <?= json_encode($quantities) ?>,
+                    data: <?= json_encode($quantities) ?>, // Quantity data
                     backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF'],
                     borderWidth: 1
                 }]
