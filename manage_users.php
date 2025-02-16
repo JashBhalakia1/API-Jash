@@ -154,6 +154,7 @@ $users = $userController->getAllUsers();
         <a href="order_reservation.php">🛒 Orders</a>
         <a href="sales.php">💰 Sales</a>
         <a href="report_dashboard.php">📊 Report</a>
+        <a href="users_analytics.php">📊 Analytics</a>
         <a href="logout.php">🚪 Logout</a>
     </div>
 </div>
