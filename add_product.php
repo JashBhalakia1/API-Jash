@@ -181,6 +181,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <option value="Oppo 7">Oppo 7</option>
                 <option value="Vivo 7">Vivo 7</option>
                 <option value="Samsung S24">Samsung S24</option>
+                <option value="Samsung S21">Samsung S21</option>
+                <option value="Samsung S22">Samsung S22</option>
+                <option value="Samsung S23">Samsung S23</option>
             </select>
             
             <label for="stock">Stock Quantity</label>
