@@ -113,7 +113,7 @@
             <p>Manage users, orders, inventory, view reports, and much more from here.</p>
         </div>
 
-        <!-- Section for User Management -->
+        <!-- Section for User Management 
         <div class="card">
             <div class="card-header">User Management</div>
             <div class="card-body">
@@ -122,7 +122,7 @@
             </div>
         </div>
 
-        <!-- Section for Order Reservation -->
+         Section for Order Reservation
         <div class="card">
             <div class="card-header">Order Reservation</div>
             <div class="card-body">
@@ -131,7 +131,7 @@
             </div>
         </div>
 
-        <!-- Section for Inventory Management -->
+        Section for Inventory Management
         <div class="card">
             <div class="card-header">Inventory Management</div>
             <div class="card-body">
@@ -140,10 +140,10 @@
             </div>
         </div>
 
-        <!-- Section for Analytics -->
+        Section for Analytics
         
 
-        <!-- Section for Reports -->
+        Section for Reports 
         <div class="card">
             <div class="card-header">Reports</div>
             <div class="card-body">
@@ -151,7 +151,7 @@
                 <a href="report_dashboard.php" class="btn btn-primary">View Reports</a>
             </div>
         </div>
-    </div>
+    </div> -->
 
     <!-- Bootstrap JS and Dependencies -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
