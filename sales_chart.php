@@ -14,20 +14,36 @@ $sales = new Sales($pdo);
 $salesData = $sales->getSales();
 
 // Prepare data for Chart.js ensuring no duplicate labels
+// Prepare data for Chart.js by aggregating sales per product
 $labels = [];
 $salesAmounts = [];
 $quantities = [];
-$uniqueSales = [];
+$aggregatedSales = [];
 
-// Loop through sales data to extract unique product names and corresponding sales details
 foreach ($salesData as $sale) {
-    if (!isset($uniqueSales[$sale['item_name']])) {
-        $labels[] = $sale['item_name']; // Store product names as labels
-        $salesAmounts[] = $sale['total_price']; // Store total sales amounts
-        $quantities[] = $sale['quantity']; // Store quantity sold
-        $uniqueSales[$sale['item_name']] = true; // Mark product as processed
+    $productName = $sale['item_name'];
+
+    if (!isset($aggregatedSales[$productName])) {
+        $aggregatedSales[$productName] = [
+            'total_price' => 0,
+            'quantity' => 0
+        ];
+    }
+
+    // Sum sales and quantities per product correctly
+    $aggregatedSales[$productName]['total_price'] += floatval($sale['total_price']);
+    $aggregatedSales[$productName]['quantity'] += intval($sale['quantity']);
+}
+
+// Extract data for Chart.js
+foreach ($aggregatedSales as $product => $data) {
+    if ($data['total_price'] > 0) {  // Ensure only products with sales are included
+        $labels[] = $product;
+        $salesAmounts[] = $data['total_price'];
+        $quantities[] = $data['quantity'];
     }
 }
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
