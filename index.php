@@ -100,6 +100,7 @@
     <!-- Navigation Bar -->
     <div class="navbar">
         <a href="index.php">🏠 Home</a>
+        
     </div>
 
     <!-- Welcome Section -->
@@ -110,13 +111,13 @@
         <!-- Quick Access Links -->
         <div class="quick-links">
             <a href="index1.php">📦 Login</a>
-            <a href="register.php">➕ Register Admin</a>
+            <a href="register.php">➕ admin register</a>
         </div>
     </div>
 
     <!-- Footer -->
     <footer>
-        &copy; <?php echo date("Y"); ?> Inventory System | <a href="index.php">Home</a>
+        &copy; <?php echo date("Y"); ?> Jash's System | <a href="index.php">Home</a>
     </footer>
 
 </body>
