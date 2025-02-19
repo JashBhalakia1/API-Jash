@@ -3,7 +3,7 @@ require_once 'connect/Connection.php';
 require_once 'Saleslogic.php';
 require_once 'vendor/autoload.php'; // Load TCPDF
 
-use TCPDF;
+//use TCPDF;
 
 // Initialize database connection
 $database = new Connection();
@@ -34,6 +34,7 @@ $html = '<table border="1" cellpadding="5">
                 <th>Quantity</th>
                 <th>Total Price</th>
                 <th>Date</th>
+                
             </tr>';
 
 // Add sales data to PDF
