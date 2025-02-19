@@ -10,25 +10,28 @@ $sales = new Sales($pdo); // Pass $pdo to Sales class
 $inventory = $sales->getInventory(); // Fetch inventory
 
 // Handle Sales Submission
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['record_sale'])) {
     $item_id = $_POST["item_id"];
     $quantity = $_POST["quantity"];
-
     $result = $sales->addSale($item_id, $quantity);
     $message = $result ? "✅ Sale recorded successfully!" : "❌ Error processing sale.";
+}
+
+// Handle Shipping Update
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['ship_sale'])) {
+    $sale_id = $_POST['sale_id'];
+    $sales->markAsShipped($sale_id);
 }
 
 // Fetch Sales Data
 $salesData = $sales->getSales();
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sales Management</title>
-
     <style>
         /* General Styles */
         body {
@@ -77,49 +80,6 @@ $salesData = $sales->getSales();
             margin: 50px auto;
         }
 
-        /* Form Styling */
-        form {
-            display: flex;
-            flex-direction: column;
-            text-align: left;
-        }
-
-        label {
-            font-weight: bold;
-            margin-top: 10px;
-            color: #555;
-        }
-
-        select, input[type="number"], button {
-            width: 100%;
-            padding: 10px;
-            margin-top: 5px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            font-size: 16px;
-        }
-
-        button {
-            margin-top: 20px;
-            background: #28a745;
-            color: white;
-            border: none;
-            font-size: 18px;
-            cursor: pointer;
-            transition: 0.3s;
-        }
-
-        button:hover {
-            background: #218838;
-        }
-
-        /* Notification Messages */
-        p {
-            color: red;
-            font-weight: bold;
-        }
-
-        /* Table Styling */
         table {
             width: 100%;
             border-collapse: collapse;
@@ -143,32 +103,9 @@ $salesData = $sales->getSales();
         tr:nth-child(even) {
             background-color: #f2f2f2;
         }
-
-        /* Mobile Responsive Design */
-        @media (max-width: 768px) {
-            .navbar {
-                flex-direction: column;
-                text-align: center;
-            }
-            
-            .navbar a {
-                padding: 10px;
-                display: block;
-                margin-bottom: 5px;
-            }
-            
-            .container {
-                width: 95%;
-            }
-            
-            table, th, td {
-                font-size: 14px;
-            }
-        }
     </style>
 </head>
 <body>
-
     <!-- Navigation Bar -->
     <div class="navbar">
         <div class="menu">
@@ -183,7 +120,6 @@ $salesData = $sales->getSales();
 
     <div class="container">
         <h2>Sales Management</h2>
-
         <?php if (isset($message)) { echo "<p>$message</p>"; } ?>
 
         <form method="POST">
@@ -195,11 +131,9 @@ $salesData = $sales->getSales();
                     </option>
                 <?php endforeach; ?>
             </select>
-
             <label>Quantity:</label>
             <input type="number" name="quantity" min="1" required>
-
-            <button type="submit">Record Sale</button>
+            <button type="submit" name="record_sale">Record Sale</button>
         </form>
 
         <h2>Recent Sales</h2>
@@ -210,6 +144,8 @@ $salesData = $sales->getSales();
                 <th>Quantity</th>
                 <th>Total Price</th>
                 <th>Date</th>
+                <th>Status</th>
+                <th>Action</th>
             </tr>
             <?php foreach ($salesData as $sale): ?>
                 <tr>
@@ -218,10 +154,20 @@ $salesData = $sales->getSales();
                     <td><?= $sale['quantity']; ?></td>
                     <td>$<?= number_format($sale['total_price'], 2); ?></td>
                     <td><?= $sale['sale_date']; ?></td>
+                    <td><?= $sale['status']; ?></td>
+                    <td>
+                        <?php if ($sale['status'] == 'Pending'): ?>
+                            <form method="POST" style="display:inline;">
+                                <input type="hidden" name="sale_id" value="<?= $sale['id']; ?>">
+                                <button type="submit" name="ship_sale">Ship</button>
+                            </form>
+                        <?php else: ?>
+                            ✅ Shipped
+                        <?php endif; ?>
+                    </td>
                 </tr>
             <?php endforeach; ?>
         </table>
     </div>
-
-            </body>
+</body>
 </html>
