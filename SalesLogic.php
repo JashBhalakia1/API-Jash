@@ -25,7 +25,7 @@ class Sales {
             // Calculate total price
             $total_price = $product['price'] * $quantity;
 
-            // Insert into sales table with default status 'Pending'
+            // Insert into sales table with 'Pending' status
             $stmt = $this->pdo->prepare("INSERT INTO sales (item_id, quantity, total_price, status) VALUES (?, ?, ?, 'Pending')");
             $stmt->execute([$item_id, $quantity, $total_price]);
 
@@ -57,9 +57,15 @@ class Sales {
         $stmt->execute([$start_date, $end_date]);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
-
+    
     public function markAsShipped($sale_id) {
         $stmt = $this->pdo->prepare("UPDATE sales SET status = 'Shipped' WHERE id = ?");
+        return $stmt->execute([$sale_id]);
+    }
+    
+    // New deleteSale method to remove a sale record
+    public function deleteSale($sale_id) {
+        $stmt = $this->pdo->prepare("DELETE FROM sales WHERE id = ?");
         return $stmt->execute([$sale_id]);
     }
 }
