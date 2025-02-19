@@ -99,7 +99,7 @@
         <h3 class="text-center text-white">Menu</h3>
         <a href="dashboard.php"><i class="bi bi-house-door-fill"></i> Dashboard</a>
         <a href="manage_users.php"><i class="bi bi-person-lines-fill"></i> Manage Users</a>
-        <a href="order_reservation.php"><i class="bi bi-card-checklist"></i> Order Reservation</a>
+        <!--<a href="order_reservation.php"><i class="bi bi-card-checklist"></i> Order Reservation</a>-->
         <a href="manage_inventory.php"><i class="bi bi-box"></i> Inventory Management</a>
         <a href="sales.php"><i class="bi bi-bar-chart-line"></i> Sales</a>
         <a href="report_dashboard.php"><i class="bi bi-file-earmark-earbuds"></i> Reports</a>
